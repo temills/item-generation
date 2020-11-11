@@ -9,13 +9,12 @@ import {makeQuery} from './parseData'
 
 dotenv.config();
 
-
 var con = mysql.createConnection({
     host: process.env.HOST,
     user: process.env.DBUSER,
     password: process.env.PASSWORD,
     database: process.env.DATABASE
-  });
+   });
   
   con.connect(function(err) {
     if (err) throw err;
