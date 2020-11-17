@@ -152,7 +152,7 @@
         preamble: "Please provide us with some demographic information.",
         questions: [
             {prompt: "What is your gender?", options: ["Male","Female","Other"], required:true}, 
-            {prompt: "Are you a student?", options: ["Yes","No"], required: false},
+            {prompt: "Are you a student?", options: ["Yes","No"], required: true},
             {prompt: "What is your education level?", options: ["Grade/elementary school","High school","Some college or university","College or university degree","Graduate degree, Masters","PhD"], required: true}
         ],
 	};
@@ -168,7 +168,7 @@
 	    }
 	    return false;
     };
-
+    /*
     var end = {
 	    type: 'external-html',
 	    url: "end.php?turkcode=" + turk_code,
@@ -177,6 +177,7 @@
 	    force_refresh: true
     };
     timeline.push(end);
+    */
 
     //save data to database
 

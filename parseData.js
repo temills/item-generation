@@ -1,119 +1,131 @@
 // This file holds functions for parsing the data 
 
     //reformat data before saving
-    function reformat_data(data) {
-        data2 = {};
-        bigData = [];
-        data2.exp_type = remove_quotes(data[0].exp_type);
-        responses = str_to_dict(data[2].responses);
-        data2.subject_id = responses.subject_id;
-        if(data2.exp_type == "generation") {
-            for (var i=4; i<14; i++) {
-                data2.order = i-3;
-                responses = str_to_dict(data[i].responses);
-                data2.category = Object.keys(responses)[0];
-                //can expand into response1, response2, ...
-                data2.response = Object.values(responses);
-                data2.rt = remove_quotes(data[i].rt);
-                demo1 = str_to_dict(data[data.length-2].responses); //CHANGE TO -3 AFTER ADDING END TRIAL
-                data2.age = Object.values(demo1)[0];
-                data2.language = Object.values(demo1)[1];
-                data2.nationality = Object.values(demo1)[2];
-                data2.country = Object.values(demo1)[3];
-                demo2 = str_to_dict(data[data.length-1].responses); //CHANGE TO -2 AFTER ADDING END TRIAL
-                data2.gender = Object.values(demo2)[0];
-                data2.student = Object.values(demo2)[1];
-                data2.education = Object.values(demo2)[2];
-                bigData.push(data2);
-            }            
-        }
-        else {
-            for (var i=4; i<24; i+=2) {
-                data2.order = (i/2)-1;
-                responses1 = str_to_dict(data[i].responses);
-                data2.question = Object.keys(responses1)[0];
-                data2.response = Object.values(responses1);
-                data2.rt_response = remove_quotes(data[i].rt);
-                responses2 = str_to_dict(data[i+1].responses);
-                data2.category = Object.keys(responses2)[0];
-                //can expand into consideration1, consideration2, ...
-                data2.considerations = Object.values(responses2);
-                data2.rt_considerations = remove_quotes(data[i+1].rt);
-                demo1 = str_to_dict(data[data.length-3].responses); //CHANGE TO -3 AFTER ADDING END TRIAL
-                data2.age = Object.values(demo1)[0];
-                data2.language = Object.values(demo1)[1];
-                data2.nationality = Object.values(demo1)[2];
-                data2.country = Object.values(demo1)[3];
-                demo2 = str_to_dict(data[data.length-2].responses); //CHANGE TO -2 AFTER ADDING END TRIAL
-                data2.gender = Object.values(demo2)[0];
-                data2.student = Object.values(demo2)[1];
-                data2.education = Object.values(demo2)[2];
-                bigData.push(data2);
-            }
-        }
-        makeQuery(bigData);
+function reformat_data(data) {
+    var bigData = [];
+    data2 = {};
+    data2.exp_type = remove_quotes(data[0].exp_type);
+    if(data2.exp_type == "generation") {
+        for (var i=4; i<14; i++) {
+            var data2 = {};
+            var responses = str_to_dict(data[2].responses);
+            data2.subject_id = responses.subject_id;
+            data2.exp_type = remove_quotes(data[0].exp_type);
+            data2.trial_order = i-3;
+            responses = str_to_dict(data[i].responses);
+            data2.category = Object.keys(responses)[0];
+            //can expand into response1, response2, ...
+            data2.response = Object.values(responses);
+            data2.rt = remove_quotes(data[i].rt);
+            var demo1 = str_to_dict(data[data.length-2].responses); //CHANGE TO -3 AFTER ADDING END TRIAL
+            data2.age = Object.values(demo1)[0];
+            data2.language = Object.values(demo1)[1];
+            data2.nationality = Object.values(demo1)[2];
+            data2.country = Object.values(demo1)[3];
+            var demo2 = str_to_dict(data[data.length-1].responses); //CHANGE TO -2 AFTER ADDING END TRIAL
+            data2.gender = Object.values(demo2)[0];
+            data2.student = Object.values(demo2)[1];
+            data2.education = Object.values(demo2)[2];
+            bigData.push(data2);
+        }            
     }
+    else {
+        for (var i=4; i<24; i+=2) {
+            var data2 = {};
+            data2.exp_type = remove_quotes(data[0].exp_type);
+            var responses = str_to_dict(data[2].responses);
+            data2.subject_id = responses.subject_id;
+            data2.trial_order = (i/2)-1;
+            var responses1 = str_to_dict(data[i].responses);
+            data2.question = Object.keys(responses1)[0];
+            data2.response = Object.values(responses1);
+            data2.rt_response = remove_quotes(data[i].rt);
+            var responses2 = str_to_dict(data[i+1].responses);
+            data2.category = Object.keys(responses2)[0];
+            //can expand into consideration1, consideration2, ...
+            data2.considerations = Object.values(responses2);
+            data2.rt_considerations = remove_quotes(data[i+1].rt);
+            var demo1 = str_to_dict(data[data.length-2].responses); //CHANGE TO -3 AFTER ADDING END TRIAL, -2 WITHOUT
+            data2.age = Object.values(demo1)[0];
+            data2.language = Object.values(demo1)[1];
+            data2.nationality = Object.values(demo1)[2];
+            data2.country = Object.values(demo1)[3];
+            var demo2 = str_to_dict(data[data.length-1].responses); //CHANGE TO -2 AFTER ADDING END TRIAL, -1 WITHOUT
+            data2.gender = Object.values(demo2)[0];
+            data2.student = Object.values(demo2)[1];
+            data2.education = Object.values(demo2)[2];
+            bigData.push(data2);
+        }
+    }
+    return bigData;
+}
 
-    function str_to_dict(str) {
-        dict = {};
-        if(str[0] == "{") {
-            key = "";
-            for(start = 2; start<str.length; start++) {
-                end = start;
-                while(true) {
-                    if(str[end]== "\"") {
-                        if(str[end+1] == ":") {
-                            key = str.substring(start, end);
-                            start = end+2;
-                            break;
-                        }
-                        else if((str[end+1] == ",") ||(str[end+1] == "}")) {
-                            dict[key] = str.substring(start, end);
-                            start = end+2;
-                            break;
-                        }
+function str_to_dict(str) {
+    var dict = {};
+    if(str[0] == "{") {
+        var key = "";
+        for(var start = 2; start<str.length; start++) {
+            var end = start;
+            while(true) {
+                if(str[end]== "\"") {
+                    if(str[end+1] == ":") {
+                        key = str.substring(start, end);
+                        start = end+2;
+                        break;
                     }
-                    end++;
+                    else if((str[end+1] == ",") ||(str[end+1] == "}")) {
+                        dict[key] = str.substring(start, end);
+                        start = end+2;
+                        break;
+                    }
                 }
+                end++;
             }
         }
-        return dict;
     }
+    return dict;
+}
 
-    function remove_quotes(str) {
-        if((str[0] == str[str.length-1] == "\"") && (str.length > 1))
-            return str.substring(1, str.length-1);
-        else
-            return str;
-    }
-
-    function remove_spaces(str) {
-        for(i=0; i<str.length; i++)
-            if(str[i] == " ")   str[i] = "_";
+function remove_quotes(str) {
+    if((str[0] == str[str.length-1] == "\"") && (str.length > 1))
+        return str.substring(1, str.length-1);
+    else
         return str;
-    }
+}
+
+function remove_spaces(str) {
+    for(i=0; i<str.length; i++)
+        if(str[i] == " ")   str[i] = "_";
+    return str;
+}
 
 export function makeQuery(data) {
     console.log("Parsing");
-    table = data[0].exp_type;
-    for(key in data[0].keys()) {
-        keys.concat(key + ", ")
+    data = reformat_data(data);
+    var table = data[0].exp_type;
+    var keys = "";
+    var keyArr = Object.keys(data[0]);
+    for(var i=0; i<keyArr.length; i++) {
+        keys = keys.concat(keyArr[i] + ", ");
     }
-    keys = "(" + keys.substring(0, keys.length()-2) + ")";
-    valuesList = []
-    i = 0;
-    for (dict in data) {
-        for(val in dict.values()) {
-            valuesList[i].concat("'" + val + "', ")
+    keys = "(" + keys.substring(0, keys.length-2) + ")";
+    var valuesList = [];
+    var x = 0;
+    for(var i=0; i<data.length; i++) {
+        var dict = data[i];
+        valuesList[x] = "";
+        var valArray = Object.values(dict);
+        for(var j=0; j<valArray.length; j++) {
+            valuesList[x] = valuesList[x].concat("'" + valArray[j] + "', ");
         }
-        i++;
+        x++;
     }
-    valuesStr = ""
-    for (i=0; i<valuesList.length(); i++) {
-        values = valuesList[i];
-        values = "(" + values.substring(0, values.length()-2) + ")";
+    var valuesStr = ""
+    for (var i=0; i<valuesList.length; i++) {
+        var values = valuesList[i];
+        values = "(" + values.substring(0, values.length-2) + ")";
         valuesStr = valuesStr + values + ", ";
     }
-    valuesStr = valuesStr.substring(0, valuesStr.length()-2);
-    return "INSERT INTO " + table + " " + keys + "VALUES " + valuesStr + ";";
+    valuesStr = valuesStr.substring(0, valuesStr.length-2);
+    return "INSERT INTO " + table + keys + " " + "VALUES " + valuesStr + ";";
 }
