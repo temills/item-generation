@@ -40,6 +40,7 @@ function reformat_data(data) {
         for (var i=4; i<24; i+=2) {
             var data2 = {};
             data2.exp_type = remove_quotes(data[0].exp_type);
+            data2.turk_code = remove_quotes(data[0].turk_code);
             var responses = str_to_dict(data[2].responses);
             data2.subject_id = responses.subject_id;
             data2.trial_order = (i/2)-1;
