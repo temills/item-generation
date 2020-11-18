@@ -185,7 +185,6 @@
     jsPsych.init({
         timeline,
         on_finish: function() {
-            jsPsych.data.displayData();
             save_data(jsPsych.data.get().values());
         }
     })
