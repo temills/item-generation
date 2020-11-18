@@ -11,21 +11,28 @@ function reformat_data(data) {
             var responses = str_to_dict(data[2].responses);
             data2.subject_id = responses.subject_id;
             data2.exp_type = remove_quotes(data[0].exp_type);
+            data2.turk_code = remove_quotes(data[0].turk_code);
             data2.trial_order = i-3;
             responses = str_to_dict(data[i].responses);
             data2.category = Object.keys(responses)[0];
-            //can expand into response1, response2, ...
-            data2.response = Object.values(responses);
+            //data2.response = Object.values(responses);
+            for(var j=1; j<11; j++) {
+                var key = "response" + j;
+                //key = eval(`response${i}`);
+                data2[key] = Object.values(responses)[j-1];
+            }
+            console.log("ok");
             data2.rt = remove_quotes(data[i].rt);
-            var demo1 = str_to_dict(data[data.length-2].responses); //CHANGE TO -3 AFTER ADDING END TRIAL
+            var demo1 = str_to_dict(data[data.length-3].responses); //CHANGE TO -3 AFTER ADDING END TRIAL
             data2.age = Object.values(demo1)[0];
             data2.language = Object.values(demo1)[1];
             data2.nationality = Object.values(demo1)[2];
             data2.country = Object.values(demo1)[3];
-            var demo2 = str_to_dict(data[data.length-1].responses); //CHANGE TO -2 AFTER ADDING END TRIAL
+            var demo2 = str_to_dict(data[data.length-2].responses); //CHANGE TO -2 AFTER ADDING END TRIAL
             data2.gender = Object.values(demo2)[0];
             data2.student = Object.values(demo2)[1];
             data2.education = Object.values(demo2)[2];
+            console.log(data2);
             bigData.push(data2);
         }            
     }
@@ -43,14 +50,18 @@ function reformat_data(data) {
             var responses2 = str_to_dict(data[i+1].responses);
             data2.category = Object.keys(responses2)[0];
             //can expand into consideration1, consideration2, ...
-            data2.considerations = Object.values(responses2);
+            //data2.considerations = Object.values(responses2);
+            for(var j=1; j<9; j++) {
+                var key = 'consideration' + j;
+                data2[key] = Object.values(responses2)[j-1];
+            }
             data2.rt_considerations = remove_quotes(data[i+1].rt);
-            var demo1 = str_to_dict(data[data.length-2].responses); //CHANGE TO -3 AFTER ADDING END TRIAL, -2 WITHOUT
+            var demo1 = str_to_dict(data[data.length-3].responses); //CHANGE TO -3 AFTER ADDING END TRIAL, -2 WITHOUT
             data2.age = Object.values(demo1)[0];
             data2.language = Object.values(demo1)[1];
             data2.nationality = Object.values(demo1)[2];
             data2.country = Object.values(demo1)[3];
-            var demo2 = str_to_dict(data[data.length-1].responses); //CHANGE TO -2 AFTER ADDING END TRIAL, -1 WITHOUT
+            var demo2 = str_to_dict(data[data.length-2].responses); //CHANGE TO -2 AFTER ADDING END TRIAL, -1 WITHOUT
             data2.gender = Object.values(demo2)[0];
             data2.student = Object.values(demo2)[1];
             data2.education = Object.values(demo2)[2];
@@ -102,6 +113,7 @@ function remove_spaces(str) {
 export function makeQuery(data) {
     console.log("Parsing");
     data = reformat_data(data);
+    console.log("done");
     var table = data[0].exp_type;
     var keys = "";
     var keyArr = Object.keys(data[0]);
@@ -127,5 +139,6 @@ export function makeQuery(data) {
         valuesStr = valuesStr + values + ", ";
     }
     valuesStr = valuesStr.substring(0, valuesStr.length-2);
+    //console.log(valuesStr);
     return "INSERT INTO " + table + keys + " " + "VALUES " + valuesStr + ";";
 }

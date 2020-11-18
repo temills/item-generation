@@ -19,16 +19,19 @@
 
 //<script src = "./jquery.plug-in.js" type =
     // meta-variables - fill in
-    var turk_code = "";
-    var study_time = 4;
-    var study_money = .26;
+    var turk_code = jsPsych.randomization.randomID(12);
+    var study_time = 0;
+    var study_money = 0;
+    jsPsych.data.addProperties({
+        turk_code: turk_code
+    });
 
     var timeline = [];
     
     //get consent
     var consent = {
         type: "html-button-response",
-        stimulus: "<h4>Please consider this information carefully before deciding whether to participate in this research.</h4><h4>The purpose of this research is to examine how people consider possibilities. We are simply interested in your thought process. The study will take less than 10 minutes to complete, and you will receive $2.00 on Amazon Mechanical Turk. There are no anticipated risks associated with participating in this study. The effects of participating should be comparable to those you would ordinarily experience from viewing a computer monitor and using a mouse or keyboard for a similar amount of time.</h4> <h4>Your participation in this study is completely voluntary and you may refuse to participate or you may choose to withdraw at any time without penalty or loss of benefits to which you are otherwise entitled. Your participation in this study will remain confidential. No personally identifiable information will be associated with your data. Also, all analyses of the data will be averaged across all the participants, so your individual responses will never be specifically analyzed. </h4> <h4>Agreement: The nature and purpose of this research have been sufficiently explained and I agree to participate in this study. I understand that I am free to withdraw at any time without incurring any penalty. Please consent by clicking the button below to continue. Otherwise, please exit the study at this time.</h4>",
+        stimulus: "<h4>Please consider this information carefully before deciding whether to participate in this research.</h4><h4>The purpose of this research is to examine how people consider possibilities. We are simply interested in your thought process. The study will take less than" + study_time + " minutes to complete, and you will receive $" + study_money + " on Amazon Mechanical Turk. There are no anticipated risks associated with participating in this study. The effects of participating should be comparable to those you would ordinarily experience from viewing a computer monitor and using a mouse or keyboard for a similar amount of time.</h4> <h4>Your participation in this study is completely voluntary and you may refuse to participate or you may choose to withdraw at any time without penalty or loss of benefits to which you are otherwise entitled. Your participation in this study will remain confidential. No personally identifiable information will be associated with your data. Also, all analyses of the data will be averaged across all the participants, so your individual responses will never be specifically analyzed. </h4> <h4>Agreement: The nature and purpose of this research have been sufficiently explained and I agree to participate in this study. I understand that I am free to withdraw at any time without incurring any penalty. Please consent by clicking the button below to continue. Otherwise, please exit the study at this time.</h4>",
         //<h4>If you have questions or concerns about your participation or payment or want to request a summary of research findings, please contact... For any other problems related to this study, you may also contact the faculty member supervising this work: Fiery Cushman, cushman@fas.harvard.edu.</h4> <h4>For questions, concerns, suggestions, or complaints that have not been or cannot be addressed by the researcher, or to report research-related harm, please contact ..... Phone: 617-496-2847. Email: cuhs@fas.harvard.edu</h4> <h4>Please print or save a copy of this form for your records.</h4> 
         choices: ['Submit']
     };
@@ -159,25 +162,12 @@
     timeline.push(demo2);
 
     //submit HIT with completion code
-    var check_end = function(elem) {
-	    if ($('#end_checkbox').is(':checked')) {
-		    return true;
-	    } else {
-		    alert("Make sure to copy the code.");
-		    return false;
-	    }
-	    return false;
-    };
-    /*
     var end = {
-	    type: 'external-html',
-	    url: "end.php?turkcode=" + turk_code,
-	    cont_btn: "end",
-	    check_fn: check_end,
-	    force_refresh: true
+        type: "html-button-response",
+        stimulus: "<h4>Thank you for your participation!</h4><h4>In order to complete this HIT, you must enter the code below into Turk.</h4><h4>Your secret completion code is:<br><br>" + turk_code + "<br><br>Copy this code now.</h4><h4>Once you've copied it, click the button below to leave this window.</h4>",
+        choices: ['Finish'],
     };
     timeline.push(end);
-    */
 
     //save data to database
 
