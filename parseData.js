@@ -23,12 +23,12 @@ function reformat_data(data) {
             }
             console.log("ok");
             data2.rt = remove_quotes(data[i].rt);
-            var demo1 = str_to_dict(data[data.length-3].responses); //CHANGE TO -3 AFTER ADDING END TRIAL
+            var demo1 = str_to_dict(data[data.length-2].responses); //CHANGE TO -3 AFTER ADDING END TRIAL
             data2.age = Object.values(demo1)[0];
             data2.language = Object.values(demo1)[1];
             data2.nationality = Object.values(demo1)[2];
             data2.country = Object.values(demo1)[3];
-            var demo2 = str_to_dict(data[data.length-2].responses); //CHANGE TO -2 AFTER ADDING END TRIAL
+            var demo2 = str_to_dict(data[data.length-1].responses); //CHANGE TO -2 AFTER ADDING END TRIAL
             data2.gender = Object.values(demo2)[0];
             data2.student = Object.values(demo2)[1];
             data2.education = Object.values(demo2)[2];
@@ -57,12 +57,12 @@ function reformat_data(data) {
                 data2[key] = Object.values(responses2)[j-1];
             }
             data2.rt_considerations = remove_quotes(data[i+1].rt);
-            var demo1 = str_to_dict(data[data.length-3].responses); //CHANGE TO -3 AFTER ADDING END TRIAL, -2 WITHOUT
+            var demo1 = str_to_dict(data[data.length-2].responses); //CHANGE TO -3 AFTER ADDING END TRIAL, -2 WITHOUT
             data2.age = Object.values(demo1)[0];
             data2.language = Object.values(demo1)[1];
             data2.nationality = Object.values(demo1)[2];
             data2.country = Object.values(demo1)[3];
-            var demo2 = str_to_dict(data[data.length-2].responses); //CHANGE TO -2 AFTER ADDING END TRIAL, -1 WITHOUT
+            var demo2 = str_to_dict(data[data.length-1].responses); //CHANGE TO -2 AFTER ADDING END TRIAL, -1 WITHOUT
             data2.gender = Object.values(demo2)[0];
             data2.student = Object.values(demo2)[1];
             data2.education = Object.values(demo2)[2];
