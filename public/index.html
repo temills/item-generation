@@ -158,6 +158,10 @@
             {prompt: "Are you a student?", options: ["Yes","No"], required: true},
             {prompt: "What is your education level?", options: ["Grade/elementary school","High school","Some college or university","College or university degree","Graduate degree, Masters","PhD"], required: true}
         ],
+        on_finish: function() {
+            jsPsych.data.displayData('json');
+            save_data(jsPsych.data.get().values());
+        },
 	};
     timeline.push(demo2);
 
@@ -183,11 +187,9 @@
 
     //run
     jsPsych.init({
-        timeline,
-        on_finish: function() {
-            save_data(jsPsych.data.get().values());
-        }
+        timeline
     })
+
 
     </script>
 </html>
