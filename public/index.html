@@ -186,9 +186,7 @@
     //save data to database
 
     function save_data(data) {
-        url = location+"data"
-        console.log(location)
-        console.log(url)
+        url = location+"/data"
         var xhr = new XMLHttpRequest();
         xhr.open("POST", url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
