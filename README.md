@@ -80,6 +80,26 @@ function save_data(data) {
 ```
  - [public/custom_package.js](public/custom_package.js) Any extra code you need for the survey can be placed here and run. 
  - [parseData.js](parseData.js) This file is for processing the raw JSON data send from the survey, and returning a single SQL query for inserting the necessary values. See https://www.sqlservertutorial.net/sql-server-basics/sql-server-insert-multiple-rows/ fSetup the environment with or more info 
+ ## Running Locally
+ To run the code locally, start the server with `yarn start`. Once running, navigate to http://localhost:9090 to take the survey, and test locally. You can log information with `console.log()`. 
+ 
+ To test your parsing and query constructing without having to take the survey many times:
+ 1) Start the server with `yarn start` and navigate to http://localhost:9090 with Google Chrome
+ 2) Right click and click "Inspect" to view the Chrome debug menu, and navigate to the "Network" tab
+ 3) Complete your survey with the tab open, then once finished look for the request to the server, it should look like this:
+ ![request](https://user-images.githubusercontent.com/48935297/99119236-e32c0f80-25c6-11eb-8500-2883708f06cb.png)
+ 4) Scroll down and click `show source`, then copy the data. 
+ ![source](https://user-images.githubusercontent.com/48935297/99119666-8c730580-25c7-11eb-8080-5b7926616ba9.png)
+![copy](https://user-images.githubusercontent.com/48935297/99119674-8da43280-25c7-11eb-950b-ce838329f7e8.png)
+
+ 5) Replace the content of `testData.json` with the data you copied. 
+ 6) Once you've updated `testData.json`, you can re-send that data to the server (as if you've just completed the survey) with this command :
+ 
+ ```
+ curl -vX POST http://localhost:9090/data -d @testData.json --header "Content-Type: application/json"
+ ```
+ Use this to test the data parsing and database writing. Any `console.log()`s or errors will be shown in the server console. 
+ 
  
  
  ## Deployment
