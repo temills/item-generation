@@ -20,8 +20,11 @@ function reformat_data(data) {
                 var key = "response" + j;
                 //key = eval(`response${i}`);
                 var res = Object.values(responses)[j-1];
+                console.log(res);
                 res = res.replace("'", "");
+                console.log(res);
                 res = res.replace('"', '');
+                console.log(res);
                 data2[key] = res;
             }
             console.log("ok");
@@ -61,8 +64,11 @@ function reformat_data(data) {
             for(var j=1; j<9; j++) {
                 var key = 'consideration' + j;
                 var res = Object.values(responses2)[j-1];
+                console.log(res);
                 res = res.replace("'", "");
+                console.log(res);
                 res = res.replace('"', '');
+                console.log(res);
                 data2[key] = res;
             }
             data2.rt_considerations = remove_quotes(data[i+1].rt);
