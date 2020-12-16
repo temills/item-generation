@@ -49,7 +49,9 @@ function reformat_data(data) {
             var responses1 = str_to_dict(data[i].responses);
             data2.question = Object.keys(responses1)[0];
             var res1 = Object.values(responses1)[0];
+            console.log(res1);
             res1.replace("'", "");
+            console.log(res1);
             data2.response = res1;
             data2.rt_response = remove_quotes(data[i].rt);
             var responses2 = str_to_dict(data[i+1].responses);
