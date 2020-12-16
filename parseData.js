@@ -23,6 +23,7 @@ function reformat_data(data) {
                 res = res.replace(/'/gi, "");
                 res = res.replace(/"/gi, "");
                 res = res.replace(/;/gi, "");
+                res = res.replace(/\//gi, "");
                 data2[key] = res;
             }
             console.log("ok");
@@ -54,6 +55,7 @@ function reformat_data(data) {
             res1 = res1.replace(/'/gi, "");
             res1 = res1.replace(/"/gi, "");
             res1 = res1.replace(/;/gi, "");
+            res1 = res1.replace(/\//gi, "");
             data2.response = res1;
             data2.rt_response = remove_quotes(data[i].rt);
             var responses2 = str_to_dict(data[i+1].responses);
@@ -66,6 +68,7 @@ function reformat_data(data) {
                 res = res.replace(/'/gi, "");
                 res = res.replace(/"/gi, "");
                 res = res.replace(/;/gi, "");
+                res = res.replace(/\//gi, "");
                 data2[key] = res;
             }
             data2.rt_considerations = remove_quotes(data[i+1].rt);
