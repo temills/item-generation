@@ -117,7 +117,6 @@ function remove_spaces(str) {
 
 export function makeQuery(data) {
     console.log("Parsing");
-    data = JSON.stringify(data);
     data = reformat_data(data);
     console.log("done");
     var table = data[0].exp_type;
