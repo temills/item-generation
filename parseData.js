@@ -20,7 +20,8 @@ function reformat_data(data) {
                 var key = "response" + j;
                 //key = eval(`response${i}`);
                 var res = Object.values(responses)[j-1];
-                res.replace("'", "");
+                res = res.replace("'", "");
+                res = res.replace('"', '');
                 data2[key] = res;
             }
             console.log("ok");
@@ -49,9 +50,8 @@ function reformat_data(data) {
             var responses1 = str_to_dict(data[i].responses);
             data2.question = Object.keys(responses1)[0];
             var res1 = Object.values(responses1)[0];
-            console.log(res1);
-            res1.replace("'", "");
-            console.log(res1);
+            res1 = res1.replace("'", "");
+            res1 = res1.replace('"', '');
             data2.response = res1;
             data2.rt_response = remove_quotes(data[i].rt);
             var responses2 = str_to_dict(data[i+1].responses);
@@ -61,7 +61,8 @@ function reformat_data(data) {
             for(var j=1; j<9; j++) {
                 var key = 'consideration' + j;
                 var res = Object.values(responses2)[j-1];
-                res.replace("'", "");
+                res = res.replace("'", "");
+                res = res.replace('"', '');
                 data2[key] = res;
             }
             data2.rt_considerations = remove_quotes(data[i+1].rt);
