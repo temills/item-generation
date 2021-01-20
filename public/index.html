@@ -59,7 +59,7 @@
 
     //add ID and exp type to data
     //var subject_id = jsPsych.data.getLastTrialData().select('responses').Q0;
-    var experiment_type = jsPsych.randomization.sampleWithoutReplacement(['response', 'generation'], 1)[0];
+    var experiment_type = 'response'; //jsPsych.randomization.sampleWithoutReplacement(['response', 'generation'], 1)[0];
     jsPsych.data.addProperties({
         exp_type: experiment_type
     });
@@ -128,7 +128,7 @@
         }
         response_trial_2 = {
             type: 'survey-text',
-            preamble: "<br>Please list as many things as you can remember considering before you made your decision (you should include what you actually chose).<br><br>It's completely okay to list them if you thought about them, but then immediately realized they weren't actually good options. Type \"n/a\" in any unused text boxes.",
+            preamble: "<br>Please list as many of the options that you can remember considering before you made your decision (you should include what you actually chose).<br><br>It's completely okay to list them if you thought about them, but then immediately realized they weren't actually good options. Type \"n/a\" in any unused text boxes.",
             questions: [
                 {prompt: "", name: shuffled_prompts[i].cat, required: true},
                 {prompt: "", required: true},
