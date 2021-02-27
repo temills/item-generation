@@ -1,0 +1,106 @@
+leopard
+anaconda
+arctic fox
+eagle
+bee-eater
+weaver
+bonobo
+camel
+capybara
+cheetah
+alligator
+elephant
+beetle
+tortoise
+giraffe
+gorilla
+grizzly bear
+baboon
+hippo
+jaguar
+cobra
+koala
+lemur
+lion
+viper
+meerkat
+monkey
+mountain lion
+otter
+penguin
+polar bear
+rattlesnake
+red panda
+panda
+reindeer
+rhino
+tiger
+sloth
+turtle
+zebra
+frog
+lizard
+alpaca
+bison
+flamingo
+owl
+beaver
+salamander
+ferret
+bobcat
+sea lion
+chicken
+crocodile
+emu
+newt
+anteater
+gecko
+goat
+seal
+tarantula
+vulture
+armadillo
+chinchilla
+wolf
+donkey
+porcupine
+orangutan
+toad
+mouse
+shrew
+butterfly
+scorpion
+beetle
+snail
+slug
+millipede
+ostrich
+duck
+goose
+fox
+polar bear
+puma
+hyena
+gazelle
+chimpanzee
+kangaroo
+mole rat
+
+antelope
+fish
+whale
+donkey
+cow
+horse
+aardvark
+gerbil
+opossum
+ox
+swan
+dolphin
+peacock
+bat
+iguana
+raccoon
+emu
+prairie dog
