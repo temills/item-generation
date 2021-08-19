@@ -338,6 +338,17 @@ for cat, qLists in resList.items():
     print(cat + " average: " + str(total/div))
     print(" ")
 
+newRes = {}
+for d in resCounts['zoo animals'].values():
+    for i in d['considerations'].items():
+        animal = i[0]
+        count = i[1]
+        print(animal)
+        print(count)
+        newRes[animal] = newRes.get(animal, 0) + count
+print(sorted(newRes.items(), key=lambda item: item[1]))
+
+print(sorted(genCounts['zoo animals'].items(), key=lambda item: item[1]))
 #print(str(averageInCommon))
 #print(resCounts)
 #print(resList)

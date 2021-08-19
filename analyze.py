@@ -3,16 +3,53 @@
 import json
 from difflib import get_close_matches
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import random
 
 numCats = 10
 categories = ['types of furniture', 'vegetables', 'chain restaurants', 'breakfast foods', 'sports', 'clothing items', 'zoo animals', 'jobs', 'holidays', 'kitchen appliances']
 
-with open('/Users/traceymills/Documents/generation_data.csv.json') as f:
+with open('generation_data.json') as f:
   gen_data = json.load(f)
 with open('/Users/traceymills/Documents/response_data.csv.json') as f:
     res_data = json.load(f)
+
+def replaceGen(gen):
+    if gen in ["4th of july", "july 4", "july 4th", "independence day", "independance day"]: gen = "fourth of july"
+    if gen in ["st pattys day", "st pattys", "emancipation day", "st patricks day"]: gen = "st. patrick's day"
+    if gen in ["new years eve", "new years", "NYE", "new years day ", "new years day"]: gen = "new years"
+    if gen in ["mlk", "mlk day", "martin luther king day"]: gen = "martin luther king jr. day"
+    if gen in ["columbus", "columbus day", "columbus day "]: gen = "christopher columbus day"
+    if gen in ["christmas eve"]: gen = "chrismas"
+    if gen in ["mailman", "mail delivery person", "mailperson"]: gen = "mail carrier"
+    if gen in ["garbage person", "trashman", "garbageperson","garbage truck driver", "garbageman", "garbage man"]: gen = "garbage collector"
+    if gen in ["fireman","fireperson"]: gen = "firefighter"
+    if gen in ["waitress", "server", "waiter"]: gen = "waitstaff"
+    if gen in ["salesman", "retail"]: gen = "salesperson"
+    if gen in ["footballer"]: gen = "football player"
+    if gen in ["office"]: gen = "office worker"
+    if gen in ["marketing"]: gen = "marketer"
+    if gen in ["computer programmer", "software engineer"]: gen = "programmer"
+    if gen in ["kfc"]: gen = "kentucky fried chicken"
+    if gen in ["track", "cross country", "track and field", "sprinting", "running race", "racing"]: gen = "running"
+    if gen in ["horse riding", "horse racing"]: gen = "horseback riding"
+    if gen in ["car racing", "race car driver", "nascar", "auto racing", "formula 1 "]: gen = "racecar driving"
+    if gen in ["racketball"]: gen = "raquetball"
+    if gen in ["table tennis"]: gen = "ping pong"
+    if gen in ["skating", "speed skating", "figure skating"]: gen = "ice skating"
+    if gen in ["mma"]: gen = "boxing"
+    if gen in ["swim", "synchronized swimming"]: gen = "swimming"
+    if gen in ["ice hockey"]: gen = "hockey"
+    if gen in ["basket ball"]: gen = "basketball"
+    if gen in ["biking"]: gen = "cycling"
+    if gen in ["snowboard"]: gen = "snowboarding"
+    if gen in ["ultimate frisbee"]: gen = "frisbee"
+    if gen in ["cheer"]: gen = "cheerleading"
+    if gen in ["stand mixer", "hand mixer", "standing mixer", "mixer"]: gen = "electric mixer"
+    if gen in ["instapot", "insta pot"]: gen = "pressure cooker"
+    if gen in ["cook"]: gen = "chef"
+    if gen in ["police man", "cop", "police", "policeman", "officer"]: gen = "police officer"
+    return gen
 
 def generations(data):
     trialsPerCat = len(data)/numCats
@@ -31,10 +68,13 @@ def generations(data):
             matches = get_close_matches(gen, genCounts[cat].keys(), 1, 0.85)
             if len(matches) > 0:
                 gen = matches[0]
+            gen = replaceGen(gen)
             genCounts[cat][gen] = genCounts[cat].get(gen, 0) + 1
             genList[cat][len(genList[cat])-1].append(gen)
         genList[cat][len(genList[cat])-1] = list(set(genList[cat][len(genList[cat])-1]))
     return genCounts, genList
+genCounts, genList = generations(gen_data)
+print(sorted(genCounts["jobs"].items(), key=lambda x: x[1], reverse=True))
 
 #for each category, for each question, record all responses/considerations and counts, and a list of each subjects responses
 def considerations(data):
@@ -43,6 +83,7 @@ def considerations(data):
     i = 0
     for trial in data:
         cat = trial['category']
+        if cat != 'zoo animals': continue
         resCounts[cat] = resCounts.get(cat, {})
         resList[cat] = resList.get(cat, {})
         q = trial['question'] 
@@ -57,7 +98,9 @@ def considerations(data):
         resCounts[cat][q]['responses'] = (resCounts[cat][q].get('responses', {}))
         resCounts[cat][q]['responses'][res] = resCounts[cat][q]['responses'].get(res, 0) + 1
         resCounts[cat][q]['considerations'] = resCounts[cat][q].get('considerations', {})
-        resList[cat][q].append([res])
+        trialDict = {"response": "", "considerations": []}
+        trialDict["response"] = res
+        #resList[cat][q].append([res])
         for i in range(1, 8):
             key = 'consideration' + str(i)
             con = trial[key].lower()
@@ -67,12 +110,28 @@ def considerations(data):
             if len(matches) > 0:
                 con = matches[0]
             resCounts[cat][q]['considerations'][con] = resCounts[cat][q]['considerations'].get(con, 0) + 1
-            resList[cat][q][len(resList[cat][q])-1].append(con)
-        resList[cat][q][len(resList[cat][q])-1] = list(set(resList[cat][q][len(resList[cat][q])-1]))
+            trialDict["considerations"].append(con)
+        #count response as consideration if not given by participant
+        if res not in trialDict["considerations"]:
+            trialDict["considerations"].append(res)
+            resCounts[cat][q]['considerations'][res] = resCounts[cat][q]['considerations'].get(res, 0) + 1
+            #resList[cat][q][len(resList[cat][q])-1].append(con)
+        #resList[cat][q][len(resList[cat][q])-1] = list(set(resList[cat][q][len(resList[cat][q])-1]))
+        resList[cat][q].append(trialDict)
         i = i+1
     return resCounts, resList
 
-
+#output list of common responses for each category
+def getCommon(genCounts):
+    for cat, d in genCounts.items():
+        if cat != "jobs":
+            continue
+        catList = []
+        print(sorted(d.items(), key=lambda x: x[1], reverse=True))
+        l = sorted(d.keys(), key=lambda x: d[x], reverse=True)
+        print(l)
+        print("")
+#getCommon(genCounts)
 #measures average number of common responses between 2 subjects - need to divide by num things
 def aveCommon(list1, list2):
     total, totalRatio, div = 0, 0, 0
@@ -132,11 +191,21 @@ def printCommon(p):
     return averageInCommon
 
 #by category: responses + number of times given, list of responses by subject
-genCounts, genList = generations(gen_data)
-#print(genCounts['zoo animals'])
+#genCounts, genList = generations(gen_data)
+#with open('/Users/traceymills/consideration/consideration-analysis/generations.json', "w") as f:
+#  json.dump(genList['zoo animals'], f)
+#with open('/Users/traceymills/consideration/consideration-analysis/generation_counts.json', "w") as f:
+#  json.dump(genCounts['zoo animals'], f)
+
 #by category by question: responses + number of times given, list of responses by subject
-resCounts, resList = considerations(res_data)
-print(resCounts["zoo animals"])
+#resCounts, resList = considerations(res_data)
+#print(resList["zoo animals"])
+#with open('/Users/traceymills/consideration/generation-trajectory/question_responses.json', "w") as f:
+#  json.dump(resList['zoo animals'], f)
+#with open('/Users/traceymills/consideration/generation-trajectory//question_response_counts.json', "w") as f:
+#  json.dump(resCounts['zoo animals'], f)
+#print(resList['zoo animals'])
+#print(resCounts["zoo animals"])
 #print(genList['zoo animals'])
 def genProbs(genCounts):
     genProbs = {}
@@ -148,7 +217,7 @@ def genProbs(genCounts):
     return genProbs
 
 #generations + probability of being generated for that category
-genProbs = genProbs(genCounts)
+#genProbs = genProbs(genCounts)
 
 def pareProbs(genProbs, prob):
     newProbs = {}
@@ -179,7 +248,7 @@ def overlapPerCategory(resCounts, genCounts):
         print(tot/6)
         print(cat + ": " + str(len(res)) + " res, " + str(len(gens)) + " gen, " + str(len(gens.intersection(res))))
 #get ratios of responses in common between generation and consideration - can compare to see which questions overlap most with generations
-overlapPerCategory(resCounts, genCounts)
+#overlapPerCategory(resCounts, genCounts)
 #common = printCommon(False)
 
 #also want to find overlap between dif questions?
@@ -211,15 +280,15 @@ def responseInGen(resCounts, genProbs):
         calc = calc + catInTotal/catTotal
         print("con " + cat + " : " + str(catInTotalc) + ", " + str(catTotalc) + " - " + str(catInTotalc/catTotalc))
         calcc = calcc + catInTotalc/catTotalc
-    print(str(calc/10))
-    print(str(calcc/10))
+    #print(str(calc/10))
+    #print(str(calcc/10))
 
 
 
 
 #what percentage of considerations given are generations?
 def considInGen(resCounts, genCounts):
-    print("CONSIDERSTIONS:")
+    print("CONSIDERATIONS:")
     for cat, gens in genCounts.items():
         catTotal, catInTotal = 0, 0
         for q in resCounts[cat]:
