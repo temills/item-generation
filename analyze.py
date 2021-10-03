@@ -14,6 +14,7 @@ with open('generation_data.json') as f:
 with open('/Users/traceymills/Documents/response_data.csv.json') as f:
     res_data = json.load(f)
 
+#messy but take care of synonyms
 def replaceGen(gen):
     if gen in ["4th of july", "july 4", "july 4th", "independence day", "independance day"]: gen = "fourth of july"
     if gen in ["st pattys day", "st pattys", "emancipation day", "st patricks day"]: gen = "st. patrick's day"
@@ -51,6 +52,7 @@ def replaceGen(gen):
     if gen in ["police man", "cop", "police", "policeman", "officer"]: gen = "police officer"
     return gen
 
+#get each subjects generations, and list of all generations+counts
 def generations(data):
     trialsPerCat = len(data)/numCats
     genCounts = {}
@@ -71,10 +73,11 @@ def generations(data):
             gen = replaceGen(gen)
             genCounts[cat][gen] = genCounts[cat].get(gen, 0) + 1
             genList[cat][len(genList[cat])-1].append(gen)
-        genList[cat][len(genList[cat])-1] = list(set(genList[cat][len(genList[cat])-1]))
+        #genList[cat][len(genList[cat])-1] = list(set(genList[cat][len(genList[cat])-1])) #might have repeats
     return genCounts, genList
+#by category: responses + number of times given, list of responses by subject
 genCounts, genList = generations(gen_data)
-print(sorted(genCounts["jobs"].items(), key=lambda x: x[1], reverse=True))
+
 
 #for each category, for each question, record all responses/considerations and counts, and a list of each subjects responses
 def considerations(data):
@@ -100,7 +103,6 @@ def considerations(data):
         resCounts[cat][q]['considerations'] = resCounts[cat][q].get('considerations', {})
         trialDict = {"response": "", "considerations": []}
         trialDict["response"] = res
-        #resList[cat][q].append([res])
         for i in range(1, 8):
             key = 'consideration' + str(i)
             con = trial[key].lower()
@@ -115,24 +117,18 @@ def considerations(data):
         if res not in trialDict["considerations"]:
             trialDict["considerations"].append(res)
             resCounts[cat][q]['considerations'][res] = resCounts[cat][q]['considerations'].get(res, 0) + 1
-            #resList[cat][q][len(resList[cat][q])-1].append(con)
-        #resList[cat][q][len(resList[cat][q])-1] = list(set(resList[cat][q][len(resList[cat][q])-1]))
         resList[cat][q].append(trialDict)
         i = i+1
     return resCounts, resList
 
-#output list of common responses for each category
-def getCommon(genCounts):
-    for cat, d in genCounts.items():
-        if cat != "jobs":
-            continue
-        catList = []
-        print(sorted(d.items(), key=lambda x: x[1], reverse=True))
-        l = sorted(d.keys(), key=lambda x: d[x], reverse=True)
-        print(l)
-        print("")
-#getCommon(genCounts)
-#measures average number of common responses between 2 subjects - need to divide by num things
+
+
+
+#everything below here is exploratory anaysis that hasn't really been used yet
+"""
+# returns average number of common responses between 2 subjects,
+# average ratio of common responses over all responses between 2 subjects,
+# and list of responses that were in common between pairs of subjects + count of how many times this occurred
 def aveCommon(list1, list2):
     total, totalRatio, div = 0, 0, 0
     commonCounts = {}
@@ -146,7 +142,6 @@ def aveCommon(list1, list2):
                     commonCounts[res] = commonCounts.get(res, 0) + 1
                 numCommon = len(common)
                 ratioCommon = numCommon/len(l1+l2)
-                #print(str(numCommon) + ": " + str(common))
                 total = total + numCommon
                 totalRatio = totalRatio + ratioCommon
                 div = div + 1
@@ -164,7 +159,7 @@ def aveCommon(list1, list2):
                 div = div + 1
     return total/div, totalRatio/div, sorted(commonCounts.items(), key=lambda x: x[1], reverse=True)
 
-#print average number of responses in common between generation and response subject for each category/question
+#nicely prints average number of responses in common between generation and response subject for each category/question
 def printCommon(p):
     averageInCommon = {}
     for cat, qLists in resList.items():
@@ -190,12 +185,7 @@ def printCommon(p):
             print(" ")
     return averageInCommon
 
-#by category: responses + number of times given, list of responses by subject
-#genCounts, genList = generations(gen_data)
-#with open('/Users/traceymills/consideration/consideration-analysis/generations.json', "w") as f:
-#  json.dump(genList['zoo animals'], f)
-#with open('/Users/traceymills/consideration/consideration-analysis/generation_counts.json', "w") as f:
-#  json.dump(genCounts['zoo animals'], f)
+
 
 #by category by question: responses + number of times given, list of responses by subject
 #resCounts, resList = considerations(res_data)
@@ -382,11 +372,185 @@ def CFVtoDifficulty(qDifficulty, common):
 
 #print("question difficulty/overlap correlation: " + str(CFVtoDifficulty(qDifficulty(), common)))
 
-#################################################
-#need more data? (~10 per question)
-#can go thru manually and clean?
 
-#for cat in resCounts:
-#    for q in resCounts[cat]:
-#        print(q + " " + str(sum(resCounts[cat][q]['responses'].values())))
+#returns dict of all responses given by category, and
+#returns dict where keys are categories, holding dict where keys are each response given for that category,
+#which holds dict where keys are order # and values are probability of that response being given at that order #
+def getProbs(data):
+    trialsPerCat = len(data)/numCats
+    resProbs = {}
+    resCounts = {}
+    for trial in data:
+        cat = trial['category']
+        resProbs[cat] = resProbs.get(cat, {})
+        for i in range(1, 11):
+            key = 'response' + str(i)
+            res = trial[key].lower()
+            resCounts[cat] = resCounts.get(cat, {})
+            matches = get_close_matches(res, resCounts[cat], 1, 0.85)
+            if len(matches) > 0:
+                res = matches[0]
+            resCounts[cat][res] = resCounts[cat].get(res, 0) + 1
+            resProbs[cat][res] = resProbs[cat].get(res, {})
+            resProbs[cat][res][i] = (resProbs[cat][res].get(i, 0)+1)/trialsPerCat #for probability rather than count
+    #for response x, resProbs[category][x].get(i, 0) = probability of x being generated ith by any subject
+    responses = {}
+    for cat in resCounts.keys():
+        responses[cat] = list(resCounts[cat].keys())
+    return responses, resCounts, resProbs
 
+#takes resProbs calculated above and returns, for each category,
+#the weighted probability of each given response
+#weighted probability calculated by summing prob of response at each order, multiplied by 1/order #, then dividing by sum of weights
+def weightProbs(resProbs):
+    probs = {}
+    for cat, resDict in resProbs.items():
+        for res, prob in resDict.items():
+            total = 0
+            div = 0
+            for i in range(1, 11):
+                total = total + (prob.get(i, 0))/(i)
+                div = div + (1/(i))
+            probs[cat] = prob.get(cat, {})
+            probs[cat][res] = total/div
+    return probs
+
+#plots responses for each category
+def plotData(responses):
+    for cat in responses.keys():
+        fig = plt.figure()
+        ax = fig.add_axes([0,0,1,1])
+        res = list(responses[cat].keys())
+        res.sort(reverse=True, key=lambda k: responses[cat][k])
+        counts = list(responses[cat].values())
+        counts.sort(reverse=True)
+        ax.bar(res, counts)
+        plt.show()
+
+#measures average number of common responses between 2 subjects
+def ave_in_common(data, responses):
+    vectors = getVecs(data, responses)
+    aveCommon = {}
+    for cat, vecs in vectors.items():
+        #one hot encodings array
+        total, div = 0, 0
+        for i in range(len(vecs)):
+            for j in range(i+1, len(vecs)):
+                common = 0
+                for k in range(len(vecs[0])):
+                    if vecs[i][k] + vecs[j][k] == 2:
+                        common = common + 1
+                total = total + common
+                div = div + 1
+        aveCommon[cat] = total/div
+    return aveCommon
+
+#compare one hot encodings vs random one hot
+def getSimilarity(data, responses):
+    vectors = getVecs(data, responses)
+    catSims = {}
+    for cat, vecs in vectors.items():
+        #one hot encodings array
+        cm = np.corrcoef(*vecs)
+        rand_vecs = []
+        for i in range(len(vecs)):
+            rand_vec = [0]*len(vecs[0])
+            x = 0
+            while x<10:
+                i = random.randint(0, len(rand_vec)-1)
+                if(rand_vec[i] == 0):
+                    rand_vec[i] = 1
+                    x = x+1
+            rand_vecs.append(rand_vec)
+        rand_cm = np.corrcoef(*rand_vecs)
+        total, rand_total = 0, 0
+        div = 0
+        for r in range (len(cm)):
+            for c in range(len(cm[0])):
+                if(r != c):
+                    total = total + cm[r][c]
+                    rand_total = rand_total + rand_cm[r][c]
+                    div = div + 1
+        catSims[cat] = (total/div, rand_total/div)
+
+    #sim = sum(list(catSims.values()))/numCats
+    sim = 0
+    return sim, catSims
+
+#correlation coefficient for one-hot encodingd
+#responses contains list of all responses for each category
+#go thru each trial, for that trial's category, get right res list, make vector 1 or 0 for each response, add vector to vector list for that cat
+#compare vecs within category, return these and average
+def getSimilarity3(data, responses):
+    vectors = getVecs(data, responses)
+    catSims = {}
+    for cat, vecs in vectors.items():
+        print(vecs)
+        cm = np.corrcoef(*vecs)
+        total = 0
+        div = 0
+        for r in range (len(cm)):
+            for c in range(len(cm[0])):
+                if(r != c):
+                    total = total + cm[r][c]
+                    div = div + 1
+        catSims[cat] = total/div
+    sim = sum(list(catSims.values()))/numCats
+    return sim, catSims
+
+#returns one hot encodings for a list of trials
+def getVecs(data, responses):
+    vectors = {}
+    for trial in data:
+        cat = trial['category']
+        vectors[cat] = vectors.get(cat, [])
+        vec = [0] * len(responses[cat])
+        for i in range(1,11):
+            key = 'response' + str(i)
+            res = trial[key].lower()
+            matches = get_close_matches(res, responses[cat], 1, 0.85)
+            if len(matches) > 0:
+                res = matches[0]
+            vec[responses[cat].index(res)] = 1
+        vectors[cat].append(vec)
+    return vectors
+
+#calc similarity using intersection of weighted response sets / union of weighted response sets
+def getSimilarity2(data):
+    lists = {}
+    for trial in data:
+        cat = trial['category']
+        lists[cat] = lists.get(cat, [])
+        responses = []
+        for i in range(1,11):
+            key = 'response' + str(i)
+            responses.append(trial[key].lower())
+        lists[cat].append(responses)
+    #now have list of lists of responses for each category
+    allSim = {}
+    for cat in lists.keys():
+        catLists = lists[cat]
+        catSim = 0
+        div = 0
+        for i in range(len(catLists)):
+            #list1 = weightByRank(catLists[i])
+            list1 = catLists[i]
+            for j in range(i+1, len(catLists)):
+                #list2 = weightByRank(catLists[j])
+                list2 = catLists[j]
+                #calc sim of list1 and list2
+                sim = len(intersect(list1, list2))/len(list1 + list2)
+                catSim = catSim + sim
+                div = div + 1
+        catSim = catSim/div        
+        allSim[cat] = catSim
+    return allSim, sum(allSim.values())/numCats
+
+def weightByRank(oldList):
+    newList = []
+    for i in range(len(oldList)):
+        for mult in range(len(oldList)-i, 1, -1):
+            for j in range(mult):
+                newList.append(oldList[i])
+    return newList
+"""
