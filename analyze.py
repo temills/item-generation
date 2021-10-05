@@ -14,7 +14,7 @@ with open('generation_data.json') as f:
 with open('/Users/traceymills/Documents/response_data.csv.json') as f:
     res_data = json.load(f)
 
-#messy but take care of synonyms
+#messy but takes care of synonyms in the response data
 def replaceGen(gen):
     if gen in ["4th of july", "july 4", "july 4th", "independence day", "independance day"]: gen = "fourth of july"
     if gen in ["st pattys day", "st pattys", "emancipation day", "st patricks day"]: gen = "st. patrick's day"
@@ -73,7 +73,9 @@ def generations(data):
             gen = replaceGen(gen)
             genCounts[cat][gen] = genCounts[cat].get(gen, 0) + 1
             genList[cat][len(genList[cat])-1].append(gen)
-        #genList[cat][len(genList[cat])-1] = list(set(genList[cat][len(genList[cat])-1])) #might have repeats
+        #uncommenting below line gets rid of repeat answers within a subject's response,
+        #but changes the order of generatipn
+        #genList[cat][len(genList[cat])-1] = list(set(genList[cat][len(genList[cat])-1]))
     return genCounts, genList
 #by category: responses + number of times given, list of responses by subject
 genCounts, genList = generations(gen_data)
@@ -186,17 +188,7 @@ def printCommon(p):
     return averageInCommon
 
 
-
-#by category by question: responses + number of times given, list of responses by subject
-#resCounts, resList = considerations(res_data)
-#print(resList["zoo animals"])
-#with open('/Users/traceymills/consideration/generation-trajectory/question_responses.json', "w") as f:
-#  json.dump(resList['zoo animals'], f)
-#with open('/Users/traceymills/consideration/generation-trajectory//question_response_counts.json', "w") as f:
-#  json.dump(resCounts['zoo animals'], f)
-#print(resList['zoo animals'])
-#print(resCounts["zoo animals"])
-#print(genList['zoo animals'])
+#probabibility of a certain item being generated for a certain category
 def genProbs(genCounts):
     genProbs = {}
     for cat, gens in genCounts.items():
@@ -205,10 +197,9 @@ def genProbs(genCounts):
         for g, n in gens.items():
             genProbs[cat][g] = n/tot
     return genProbs
-
-#generations + probability of being generated for that category
 #genProbs = genProbs(genCounts)
 
+#get generations for each category above given probability threshold
 def pareProbs(genProbs, prob):
     newProbs = {}
     for cat, gens in genProbs.items():
@@ -217,13 +208,11 @@ def pareProbs(genProbs, prob):
             if p > prob:
                 newProbs[cat][g] = p
     return newProbs
-
 #genProbs = pareProbs(genProbs, 0.)
 
 
-
-
-
+#get ratios of responses in common between generation and consideration/response experiment types
+#can compare to see which questions overlap most with generations
 def overlapPerCategory(resCounts, genCounts):
     for cat in genCounts.keys():
         gens = list(genCounts[cat].keys())
@@ -237,7 +226,6 @@ def overlapPerCategory(resCounts, genCounts):
         res = set(res)
         print(tot/6)
         print(cat + ": " + str(len(res)) + " res, " + str(len(gens)) + " gen, " + str(len(gens.intersection(res))))
-#get ratios of responses in common between generation and consideration - can compare to see which questions overlap most with generations
 #overlapPerCategory(resCounts, genCounts)
 #common = printCommon(False)
 
@@ -274,8 +262,6 @@ def responseInGen(resCounts, genProbs):
     #print(str(calcc/10))
 
 
-
-
 #what percentage of considerations given are generations?
 def considInGen(resCounts, genCounts):
     print("CONSIDERATIONS:")
@@ -295,9 +281,6 @@ def considInGen(resCounts, genCounts):
 
 #responseInGen(resCounts, genProbs)
 #considInGen(resCounts, genCounts)
-
-
-
 
 
 
@@ -333,6 +316,7 @@ def CFVtoSize(catSize, common):
     #test: estimate (or ask ppl) about hardness of question, rank out of 5?
         #more hard should mean rely more on CFV, more in common for that question esp. compared to others in that category
         #check for correlation between hardness(q), common[cat][q][avRatio]
+#fake data below, just an idea
 def qDifficulty():
     #check for correlation within category
     return {'breakfast foods': {'What breakfast food is eaten the most in October?': 5, 'What breakfast food is worst to eat before working out?': 2, 'What breakfast food is the most expensive?': 4, 'What breakfast food is the most colorful?': 1, 'What breakfast food takes the longest to eat?': 3},
