@@ -2,7 +2,7 @@
 
 import json
 from difflib import get_close_matches
-import numpy as np
+#import numpy as np
 #import matplotlib.pyplot as plt
 import random
 
@@ -11,8 +11,8 @@ categories = ['types of furniture', 'vegetables', 'chain restaurants', 'breakfas
 
 with open('generation_data.json') as f:
   gen_data = json.load(f)
-with open('/Users/traceymills/Documents/response_data.csv.json') as f:
-    res_data = json.load(f)
+#with open('/Users/traceymills/Documents/response_data.csv.json') as f:
+#    res_data = json.load(f)
 
 #messy but takes care of synonyms in the response data
 def replaceGen(gen):
@@ -80,6 +80,11 @@ def generations(data):
 #by category: responses + number of times given, list of responses by subject
 genCounts, genList = generations(gen_data)
 
+with open('generation-data/kitchen_responses.json', 'w', encoding ='utf8') as f:
+    json.dump(genList['kitchen appliances'], f)
+
+with open('generation-data/kitchen_counts.json', 'w', encoding ='utf8') as f:
+    json.dump(genCounts['kitchen appliances'], f)
 
 #for each category, for each question, record all responses/considerations and counts, and a list of each subjects responses
 def considerations(data):
