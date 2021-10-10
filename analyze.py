@@ -11,7 +11,7 @@ categories = ['types of furniture', 'vegetables', 'chain restaurants', 'breakfas
 
 with open('generation_data.json') as f:
   gen_data = json.load(f)
-#with open('/Users/traceymills/Documents/response_data.csv.json') as f:
+#with open('response_data.json') as f:
 #    res_data = json.load(f)
 
 #messy but takes care of synonyms in the response data
@@ -57,7 +57,11 @@ def generations(data):
     trialsPerCat = len(data)/numCats
     genCounts = {}
     genList = {}
-    for trial in data:
+    subjList = []
+    subj = {}
+    id = data[0]['subject_id']
+    for j in range(len(data)):
+        trial = data[j]
         cat = trial['category']
         genCounts[cat] = genCounts.get(cat, {})
         genList[cat] = genList.get(cat, [])
@@ -73,18 +77,25 @@ def generations(data):
             gen = replaceGen(gen)
             genCounts[cat][gen] = genCounts[cat].get(gen, 0) + 1
             genList[cat][len(genList[cat])-1].append(gen)
+        #add last generation list to this subject's data
+        subj[cat] = genList[cat][len(genList[cat])-1]
+        #if last response for this subject, add subject data to subjList and move to next subject
+        if((j==len(data)-1) or (data[j+1]['subject_id'] != id)):
+            subjList.append(subj)
+            id = trial['subject_id']
+            subj = {}
         #uncommenting below line gets rid of repeat answers within a subject's response,
         #but changes the order of generatipn
         #genList[cat][len(genList[cat])-1] = list(set(genList[cat][len(genList[cat])-1]))
-    return genCounts, genList
+    return genCounts, genList, subjList
 #by category: responses + number of times given, list of responses by subject
-genCounts, genList = generations(gen_data)
+genCounts, genList, subjList = generations(gen_data)
 
-with open('generation-data/kitchen_responses.json', 'w', encoding ='utf8') as f:
-    json.dump(genList['kitchen appliances'], f)
+with open('generation-data/responses_by_subject.json', 'w', encoding ='utf8') as f:
+    json.dump(subjList, f)
 
-with open('generation-data/kitchen_counts.json', 'w', encoding ='utf8') as f:
-    json.dump(genCounts['kitchen appliances'], f)
+#with open('generation-data/kitchen_counts.json', 'w', encoding ='utf8') as f:
+#    json.dump(genCounts['kitchen appliances'], f)
 
 #for each category, for each question, record all responses/considerations and counts, and a list of each subjects responses
 def considerations(data):
