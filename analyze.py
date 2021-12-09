@@ -79,10 +79,13 @@ def generations(data):
             genList[cat][len(genList[cat])-1].append(gen)
         #add last generation list to this subject's data
         subj[cat] = genList[cat][len(genList[cat])-1]
-        #if last response for this subject, add subject data to subjList and move to next subject
-        if((j==len(data)-1) or (data[j+1]['subject_id'] != id)):
+        #if last trial in data, add to subj list, don't check for dif id on nect trial
+        if(j==len(data)-1):
             subjList.append(subj)
-            id = trial['subject_id']
+        #if last response for this subject, add subject data to subjList and move to next subject
+        elif(data[j+1]['subject_id'] != id):
+            subjList.append(subj)
+            id = data[j+1]['subject_id']
             subj = {}
         #uncommenting below line gets rid of repeat answers within a subject's response,
         #but changes the order of generatipn
@@ -91,9 +94,11 @@ def generations(data):
 #by category: responses + number of times given, list of responses by subject
 genCounts, genList, subjList = generations(gen_data)
 
-with open('generation-data/responses_by_subject.json', 'w', encoding ='utf8') as f:
-    json.dump(subjList, f)
+print([len(s) for s in subjList])
 
+with open('generation_data/responses_by_subject.json', 'w', encoding ='utf8') as f:
+    json.dump(subjList, f)
+"""
 #with open('generation-data/kitchen_counts.json', 'w', encoding ='utf8') as f:
 #    json.dump(genCounts['kitchen appliances'], f)
 
@@ -138,7 +143,7 @@ def considerations(data):
         resList[cat][q].append(trialDict)
         i = i+1
     return resCounts, resList
-
+"""
 
 
 
