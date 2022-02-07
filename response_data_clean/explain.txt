@@ -1,0 +1,2 @@
+to clean data, fixed typos, decided on single name for animals with mutiple names (otter vs sea otter) 
+and consolidated some answers (boa became snake, bear became grizzly bear to differentiate from polar bear)

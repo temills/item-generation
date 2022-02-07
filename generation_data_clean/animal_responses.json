@@ -225,7 +225,7 @@
         "wolf",
         "giraffe",
         "penguin",
-        "otters"
+        "otter"
     ],
     [
         "zebra",
@@ -256,7 +256,7 @@
         "tiger",
         "lion",
         "grizzly bear",
-        "otters",
+        "otter",
         "giraffe",
         "monkey",
         "gorilla",
@@ -285,13 +285,13 @@
         "tapir",
         "iguana",
         "macaw",
-        "boa constrictor"
+        "snake"
     ],
     [
         "zebra",
         "rhino",
         "eagle",
-        "boa constrictor",
+        "snake",
         "seal",
         "polar bear",
         "elephant",
@@ -415,7 +415,7 @@
         "mountain lion",
         "jaguar",
         "cheetah",
-        "otters",
+        "otter",
         "sea lion",
         "penguin"
     ],
@@ -445,7 +445,7 @@
     ],
     [
         "zebra",
-        "otters",
+        "otter",
         "lion",
         "elephant",
         "giraffe",
@@ -497,7 +497,7 @@
         "elephant",
         "giraffe",
         "seal",
-        "otters",
+        "otter",
         "monkey",
         "grizzly bear",
         "alligator",
@@ -641,7 +641,7 @@
         "polar bear",
         "giraffe",
         "fox",
-        "otters",
+        "otter",
         "whale",
         "orca",
         "panda",
@@ -798,7 +798,7 @@
         "bird",
         "zebra",
         "giraffe",
-        "otters",
+        "otter",
         "grizzly bear",
         "deer",
         "panther"
@@ -820,7 +820,7 @@
         "panda",
         "meerkat",
         "polar bear",
-        "otters",
+        "otter",
         "turtle",
         "giraffe",
         "lion",
@@ -860,7 +860,7 @@
         "snake",
         "elephant",
         "giraffe",
-        "otters",
+        "otter",
         "bird"
     ],
     [
@@ -1002,7 +1002,7 @@
         "tiger",
         "monkey",
         "human",
-        "otters",
+        "otter",
         "whale",
         "fish",
         "shark"

@@ -2,17 +2,18 @@
 
 import json
 from difflib import get_close_matches
-#import numpy as np
+import numpy as np
 #import matplotlib.pyplot as plt
 import random
 
 numCats = 10
 categories = ['types of furniture', 'vegetables', 'chain restaurants', 'breakfast foods', 'sports', 'clothing items', 'zoo animals', 'jobs', 'holidays', 'kitchen appliances']
 
-with open('generation_data.json') as f:
+with open('generation_data_raw.json') as f:
   gen_data = json.load(f)
-#with open('response_data.json') as f:
-#    res_data = json.load(f)
+with open('response_data_raw.json') as f:
+    res_data = json.load(f)
+
 
 #messy but takes care of synonyms in the response data
 def replaceGen(gen):
@@ -94,11 +95,9 @@ def generations(data):
 #by category: responses + number of times given, list of responses by subject
 genCounts, genList, subjList = generations(gen_data)
 
-print([len(s) for s in subjList])
+#with open('generation_data/responses_by_subject.json', 'w', encoding ='utf8') as f:
+#    json.dump(subjList, f)
 
-with open('generation_data/responses_by_subject.json', 'w', encoding ='utf8') as f:
-    json.dump(subjList, f)
-"""
 #with open('generation-data/kitchen_counts.json', 'w', encoding ='utf8') as f:
 #    json.dump(genCounts['kitchen appliances'], f)
 
@@ -109,7 +108,7 @@ def considerations(data):
     i = 0
     for trial in data:
         cat = trial['category']
-        if cat != 'zoo animals': continue
+        #if cat != 'zoo animals': continue
         resCounts[cat] = resCounts.get(cat, {})
         resList[cat] = resList.get(cat, {})
         q = trial['question'] 
@@ -143,12 +142,149 @@ def considerations(data):
         resList[cat][q].append(trialDict)
         i = i+1
     return resCounts, resList
-"""
+
+
+#for each question in this category, get num times each response given as res and as consideration
+def get_response_counts(data):
+    resCounts = {}
+    i = 0
+    for (q, trials) in data.items():
+        for trial in trials:
+            resCounts[q] = resCounts.get(q, {})
+            res = trial['response']
+
+            resCounts[q]['response'] = resCounts[q].get('response', {})
+            resCounts[q]['response'][res] = resCounts[q]['response'].get(res, 0) + 1
+            resCounts[q]['consideration'] = resCounts[q].get('consideration', {})
+            cons = list(set(trial['considerations'] + [res]))
+            for c in cons:
+                resCounts[q]['consideration'][c] = resCounts[q]['consideration'].get(c, 0) + 1
+    return resCounts
+
+#get correlation between response and generation data counts for each question
+def get_response_corrs(responseCounts, genCounts):
+    res_corrs = {}
+    con_corrs = {}
+    for (q, stats) in responseCounts.items():
+        resCounts = responseCounts[q]
+        res = resCounts['response']
+        con = resCounts['consideration']
+        x1,x2,y1,y2 = [], [], [], []
+        #this way only takes data into account where there's at least one response for res/con
+        for (r, n) in res.items():
+            if(r not in genCounts.keys()):
+                continue
+            x1.append(genCounts[r])
+            y1.append(n)
+        for (c, n) in con.items():
+            if(c not in genCounts.keys()):
+                continue
+            x2.append(genCounts[c])
+            y2.append(n)
+        res_corrs[q] = np.corrcoef(x1, y1)[0][1]
+        con_corrs[q] = np.corrcoef(x2, y2)[0][1]
+        #this way puts 0s if res/con doesn't have what gen has
+        """
+        x,y1,y2 = [], [], []
+        for (g, n) in genCounts.items():
+            x.append(n)
+            y1.append(res.get(g, 0)) #put 0 if that animal never given as response
+            y2.append(con.get(g, 0))
+        res_corrs[q] = np.corrcoef(x, y1)[0][1]
+        con_corrs[q] = np.corrcoef(x, y2)[0][1]
+        """
+    return res_corrs, con_corrs
+
+def get_ratings_corrs(response_counts, ratings):
+
+    res_corrs = {}
+    con_corrs = {}
+    for (d, d_ratings) in ratings.items():
+        res_corrs[d] = {}
+        con_corrs[d] = {}
+        for (q, stats) in response_counts.items():
+            res_counts = response_counts[q]
+            res = res_counts['response']
+            con = res_counts['consideration']
+            x1,x2,y1,y2 = [], [], [], []
+            for (r, n) in res.items():
+                #skip if no data on this
+                if(r not in d_ratings.keys()):
+                    continue
+                x1.append(d_ratings[r])
+                y1.append(n)
+            for (c, n) in con.items():
+                #skip if no data on this
+                if(c not in d_ratings.keys()):
+                    continue
+                x2.append(d_ratings[c])
+                y2.append(n)
+            res_corrs[d][q] = np.corrcoef(x1, y1)[0][1]
+            con_corrs[d][q] = np.corrcoef(x2, y2)[0][1]
+    return res_corrs, con_corrs
+
+
+with open('response_data_clean/question_responses.json') as f:
+    d = json.load(f)
+with open('item-lists/animals.json') as f:
+    animals = json.load(f)
+counts = get_response_counts(d)
+
+res_counts=counts
+
+with open('generation_data_clean/animal_counts.json') as f:
+    gen_counts = json.load(f)
+
+r_corr, c_corr = get_response_corrs(res_counts, gen_counts)
+#print(r_corr)
+#print(c_corr)
+
+#take out responses we don't have data on (not a ton)
+new = {}
+wwl = {}
+for (question, stats) in counts.items():
+    new[question] = {'response': {}, 'consideration': {}}
+    wwl[question] = {'response': {}, 'consideration': {}}
+    for (res, n) in stats['response'].items():
+        if res in animals:
+            new[question]['response'][res] = n
+        else:
+            wwl[question]['response'][res] = n
+    for (con, n) in stats['consideration'].items():
+        if con in animals:
+            new[question]['consideration'][con] = n
+        else:
+            wwl[question]['consideration'][con] = n
+
+res_counts = new
+
+#get ratings
+with open('../item-ratings/descriptor-ratings/animals.json') as f:
+    ratings = json.load(f)
+
+r_corr, c_corr = get_ratings_corrs(res_counts, ratings)
+print(r_corr)
+print(c_corr)
+
+#now want correlation between generation data correlations with ratings and response data correlations with ratings? what is even happening anymore
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 #everything below here is exploratory anaysis that hasn't really been used yet
-"""
+
 # returns average number of common responses between 2 subjects,
 # average ratio of common responses over all responses between 2 subjects,
 # and list of responses that were in common between pairs of subjects + count of how many times this occurred
@@ -190,9 +326,10 @@ def printCommon(p):
         total, totalRatio, div = 0, 0, 0
         if p:
             print(cat + ":")
-        for q, qList in qLists.items():
+        for q, qDicts in qLists.items():
             if p:
                 print(q)
+            qList = [d['considerations'] for d in qDicts]
             av, avRatio, commonCounts = aveCommon(qList, genList[cat])
             averageInCommon[cat][q] = avRatio
             total = total + av
@@ -248,7 +385,7 @@ def overlapPerCategory(resCounts, genCounts):
         print(tot/6)
         print(cat + ": " + str(len(res)) + " res, " + str(len(gens)) + " gen, " + str(len(gens.intersection(res))))
 #overlapPerCategory(resCounts, genCounts)
-#common = printCommon(False)
+#common = printCommon(True)
 
 #also want to find overlap between dif questions?
 #what percentage of time are people picking options that are common generations?
@@ -558,4 +695,4 @@ def weightByRank(oldList):
             for j in range(mult):
                 newList.append(oldList[i])
     return newList
-"""
+

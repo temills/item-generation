@@ -3,7 +3,7 @@
         {
             "response": "monkey",
             "considerations": [
-                "hippopotamus",
+                "hippo",
                 "giraffe",
                 "tiger",
                 "lion",
@@ -16,7 +16,7 @@
                 "lion",
                 "tiger",
                 "panda",
-                "bear",
+                "grizzly bear",
                 "bird",
                 "snake",
                 "cheetah",
@@ -26,7 +26,7 @@
         {
             "response": "wolf",
             "considerations": [
-                "bear",
+                "grizzly bear",
                 "lion",
                 "tiger",
                 "wolf"
@@ -55,7 +55,7 @@
                 "penguin",
                 "monkey",
                 "dolphin",
-                "turtles",
+                "turtle",
                 "lion"
             ]
         },
@@ -75,7 +75,7 @@
             "considerations": [
                 "lion",
                 "tiger",
-                "bear",
+                "grizzly bear",
                 "monkey"
             ]
         },
@@ -93,7 +93,7 @@
             "considerations": [
                 "zebra",
                 "tiger",
-                "hyenas",
+                "hyena",
                 "camel"
             ]
         },
@@ -127,7 +127,7 @@
             "response": "lion",
             "considerations": [
                 "tiger",
-                "hippopotamus",
+                "hippo",
                 "monkey",
                 "lion"
             ]
@@ -145,14 +145,14 @@
             ]
         },
         {
-            "response": "hippopotamus",
+            "response": "hippo",
             "considerations": [
                 "lion",
                 "giraffe",
                 "zebra",
-                "anaconda",
+                "snake",
                 "wolf",
-                "hippopotamus"
+                "hippo"
             ]
         },
         {
@@ -160,13 +160,13 @@
             "considerations": [
                 "tiger",
                 "lion",
-                "rhinoceros"
+                "rhino"
             ]
         },
         {
             "response": "tiger",
             "considerations": [
-                "bear",
+                "grizzly bear",
                 "giraffe",
                 "lion",
                 "tiger"
@@ -203,13 +203,13 @@
             ]
         },
         {
-            "response": "chimpanzee",
+            "response": "chimp",
             "considerations": [
                 "lion",
                 "tiger",
                 "gorilla",
                 "harambe",
-                "chimpanzee"
+                "chimp"
             ]
         },
         {
@@ -230,13 +230,13 @@
             ]
         },
         {
-            "response": "a tiger",
+            "response": "tiger",
             "considerations": [
-                "rhinoceros",
+                "rhino",
                 "elephant",
                 "lion",
-                "bear",
-                "a tiger"
+                "grizzly bear",
+                "tiger"
             ]
         },
         {
@@ -244,7 +244,7 @@
             "considerations": [
                 "zebra",
                 "monkey",
-                "bear",
+                "grizzly bear",
                 "elephant"
             ]
         },
@@ -266,11 +266,11 @@
             ]
         },
         {
-            "response": "hippopotamus",
+            "response": "hippo",
             "considerations": [
                 "elephant",
                 "lion",
-                "hippopotamus"
+                "hippo"
             ]
         },
         {
@@ -280,7 +280,7 @@
                 "zebra",
                 "lion",
                 "gorilla",
-                "chimpanzee"
+                "chimp"
             ]
         },
         {
@@ -294,13 +294,13 @@
     ],
     "What zoo animal eats the most for its body weight?": [
         {
-            "response": "hippopotamus",
+            "response": "hippo",
             "considerations": [
                 "zebra",
                 "lion",
                 "tiger",
-                "bear",
-                "hippopotamus"
+                "grizzly bear",
+                "hippo"
             ]
         },
         {
@@ -311,7 +311,7 @@
                 "tiger",
                 "lion",
                 "gazelle",
-                "hippopotamus",
+                "hippo",
                 "fish"
             ]
         },
@@ -321,7 +321,7 @@
                 "elephant",
                 "tiger",
                 "lion",
-                "bear",
+                "grizzly bear",
                 "giraffe",
                 "monkey"
             ]
@@ -329,7 +329,7 @@
         {
             "response": "elephant",
             "considerations": [
-                "hippopotamus",
+                "hippo",
                 "giraffe",
                 "monkey",
                 "penguin",
@@ -344,28 +344,28 @@
             "considerations": [
                 "panda",
                 "elephant",
-                "rhinoceros",
+                "rhino",
                 "lion"
             ]
         },
         {
             "response": "elephant",
             "considerations": [
-                "rhinoceros",
+                "rhino",
                 "turtle",
                 "snake",
                 "elephant"
             ]
         },
         {
-            "response": "bear",
+            "response": "grizzly bear",
             "considerations": [
                 "giraffe",
                 "elephant",
                 "lion",
                 "tiger",
                 "bird",
-                "bear"
+                "grizzly bear"
             ]
         },
         {
@@ -374,8 +374,8 @@
                 "zebra",
                 "giraffe",
                 "gorilla",
-                "rhinoceros",
-                "hippopotamus",
+                "rhino",
+                "hippo",
                 "lion",
                 "elephant"
             ]
@@ -400,7 +400,7 @@
             "response": "lion",
             "considerations": [
                 "elephant",
-                "hippopotamus",
+                "hippo",
                 "tiger",
                 "monkey",
                 "giraffe",
@@ -413,7 +413,7 @@
                 "elephant",
                 "giraffe",
                 "tiger",
-                "bear",
+                "grizzly bear",
                 "whale"
             ]
         },
@@ -425,7 +425,7 @@
                 "otter",
                 "lion",
                 "tiger",
-                "bear",
+                "grizzly bear",
                 "elephant"
             ]
         },
@@ -445,12 +445,12 @@
         {
             "response": "elephant",
             "considerations": [
-                "bear",
+                "grizzly bear",
                 "tiger",
                 "lion",
-                "rhinoceros",
+                "rhino",
                 "panda",
-                "boa",
+                "snake",
                 "seal",
                 "elephant"
             ]
@@ -460,7 +460,7 @@
             "considerations": [
                 "lion",
                 "tiger",
-                "bear",
+                "grizzly bear",
                 "elephant",
                 "donkey"
             ]
@@ -472,7 +472,7 @@
                 "monkey",
                 "giraffe",
                 "lion",
-                "rhinoceros",
+                "rhino",
                 "cheetah",
                 "panda"
             ]
@@ -512,7 +512,7 @@
         {
             "response": "snake",
             "considerations": [
-                "bear",
+                "grizzly bear",
                 "lion",
                 "tiger",
                 "snake"
@@ -522,7 +522,7 @@
             "response": "polar bear",
             "considerations": [
                 "polar bear",
-                "bear",
+                "grizzly bear",
                 "ostrich",
                 "snake",
                 "giraffe",
@@ -537,8 +537,8 @@
                 "tiger",
                 "lion",
                 "peacock",
-                "hippopotamus",
-                "rhinoceros",
+                "hippo",
+                "rhino",
                 "polar bear"
             ]
         },
@@ -567,7 +567,7 @@
                 "horse",
                 "monkey",
                 "gorilla",
-                "chimpanzee ",
+                "chimp",
                 "penguin",
                 "giraffe",
                 "elephant"
@@ -576,9 +576,9 @@
     ],
     "What zoo animal has the biggest feet relative to its body size?": [
         {
-            "response": "chimpanzee",
+            "response": "chimp",
             "considerations": [
-                "chimpanzee",
+                "chimp",
                 "giraffe",
                 "lion"
             ]
@@ -596,7 +596,7 @@
             "considerations": [
                 "duck",
                 "elephant",
-                "hippopotamus",
+                "hippo",
                 "pelican"
             ]
         },
@@ -612,7 +612,7 @@
             "response": "duck",
             "considerations": [
                 "elephant",
-                "bear",
+                "grizzly bear",
                 "flamingo",
                 "wallaby",
                 "duck"
@@ -623,7 +623,7 @@
             "considerations": [
                 "elephant",
                 "ape",
-                "allegator",
+                "alligator",
                 "monkey"
             ]
         },
@@ -654,7 +654,7 @@
         {
             "response": "platypus",
             "considerations": [
-                "bear",
+                "grizzly bear",
                 "platypus"
             ]
         },
@@ -663,7 +663,7 @@
             "considerations": [
                 "elephant",
                 "tiger",
-                "bear",
+                "grizzly bear",
                 "penguin",
                 "platypus",
                 "sloth",
@@ -676,9 +676,9 @@
             "considerations": [
                 "panda",
                 "camel",
-                "hippopotamus",
+                "hippo",
                 "elephant",
-                "rhinoceros",
+                "rhino",
                 "gorilla",
                 "duck"
             ]
@@ -694,12 +694,12 @@
             ]
         },
         {
-            "response": "hippopotamus",
+            "response": "hippo",
             "considerations": [
-                "ostrich ",
-                "allegator",
+                "ostrich",
+                "alligator",
                 "giraffe",
-                "hippopotamus"
+                "hippo"
             ]
         },
         {
@@ -707,8 +707,8 @@
             "considerations": [
                 "tiger",
                 "giraffe",
-                "rhinoceros",
-                "hippopotamus",
+                "rhino",
+                "hippo",
                 "elephant"
             ]
         },
@@ -732,13 +732,13 @@
     ],
     "What zoo animal has the shortest lifespan?": [
         {
-            "response": "penguin ",
+            "response": "penguin",
             "considerations": [
                 "lion",
                 "tiger",
                 "elephant",
-                "hippopotamus",
-                "penguin "
+                "hippo",
+                "penguin"
             ]
         },
         {
@@ -797,7 +797,7 @@
             "considerations": [
                 "parrot",
                 "zebra",
-                "rhinoceros",
+                "rhino",
                 "giraffe",
                 "snake",
                 "penguin "
@@ -823,7 +823,7 @@
                 "lion",
                 "giraffe",
                 "tiger",
-                "bear",
+                "grizzly bear",
                 "monkey",
                 "zebra"
             ]
@@ -833,7 +833,7 @@
             "considerations": [
                 "lion",
                 "tiger",
-                "bear",
+                "grizzly bear",
                 "elephant",
                 "giraffe",
                 "penguin ",
@@ -897,8 +897,8 @@
                 "alligator",
                 "snake",
                 "lion",
-                "hippopotamus",
-                "bear",
+                "hippo",
+                "grizzly bear",
                 "monkey",
                 "gorilla",
                 "bird"
